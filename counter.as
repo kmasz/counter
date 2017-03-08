@@ -7,6 +7,9 @@
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.events.Event;
+	import com.greensock.*;
+	import com.greensock.easing.*;
+	import flash.net.Socket;
 
 
 	//public class zegar extends MovieClip
@@ -18,6 +21,7 @@
 		var start_flag = 1;
 		var xmlLoader:URLLoader = null;
 		var czas:String = new String();
+		var socket:Socket = null;
 
 		public function counter()
 		{
@@ -44,6 +48,11 @@
 		{
 			minuty = xmlData.MIN;
 			sekundy = xmlData.SEC;
+			//waitLoop();
+		}
+		override public function Play():void
+		{
+			TweenLite.to(zegarek, 0.1, {alpha:0.6, ease:Cubic.easeInOut});
 			waitLoop();
 		}
 		function waitLoop():void
@@ -52,7 +61,7 @@
 			timer.addEventListener(TimerEvent.TIMER, refresz);
 			if ( minuty == 0 && sekundy == 0)
 			{
-				//Stop();
+				hidding_clock();
 			}
 			else
 			{
@@ -112,6 +121,15 @@
 				sekundy = sekundy -1;
 			}
 		}
+		function hidding_clock():void
+		{
+			TweenLite.to(zegarek, 0.1, {alpha:0, delay:2, ease:Cubic.easeInOut, onComplete: next_play});
+		}
+		function next_play():void
+		{
+			socket = new Socket("localhost",5250);
+			socket.writeUTFBytes("CG 1 ADD 1 COUNTER 0\r\n");
+			socket.flush();
+		}
 	}
-
 }

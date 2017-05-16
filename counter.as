@@ -52,7 +52,7 @@
 		}
 		override public function Play():void
 		{
-			TweenLite.to(zegarek, 0.1, {alpha:0.6, ease:Cubic.easeInOut});
+			TweenLite.to(zegarek, 0.1, {alpha:1, ease:Cubic.easeInOut});
 			waitLoop();
 		}
 		function waitLoop():void
